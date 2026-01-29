@@ -80,7 +80,6 @@
 <body>
   
     <header>
-      <head>
         <script>
           atOptions = {
             'key' : 'e3390cf0a8cdf953ded85bdaaf3046a5',
@@ -103,31 +102,71 @@
     © 2026 ViralStream Media. All rights reserved.
   </footer>
 
-    <script>
-    // 1. Mencegah klik kanan (right-click)
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        alert("Maaf, klik kanan dinonaktifkan di situs ini.");
+<script>
+  // Monitor semua iframe yang dibuat oleh script iklan
+  (function() {
+    // Simpan URL saat ini
+    const currentURL = window.location.href;
+    history.pushState({page: 1}, null, currentURL);
+    
+    // Observer untuk deteksi iframe baru
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        mutation.addedNodes.forEach(function(node) {
+          if (node.tagName === 'IFRAME') {
+            console.log('Iframe terdeteksi:', node);
+            console.log('Iframe src:', node.src);
+            
+            // Monitor klik pada iframe
+            node.addEventListener('load', function() {
+              try {
+                // Log URL iframe jika accessible
+                console.log('Iframe loaded with URL:', node.contentWindow.location.href);
+              } catch(e) {
+                console.log('Iframe dari domain lain (cross-origin)');
+              }
+            });
+          }
+        });
+      });
     });
-
-    // 2. Mencegah penggunaan tombol Developer Tools (F12, Ctrl+Shift+I/J, Ctrl+U)
-    document.onkeydown = function(e) {
-        // Mencegah F12
-        if (e.keyCode == 123) {
-            return false;
+    
+    // Mulai observe
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+    
+    // Handle back button
+    window.addEventListener('popstate', function(e) {
+      // Jika user tekan back, tetap di halaman ini
+      if (e.state && e.state.page === 1) {
+        // Bisa tambahkan logika custom
+        console.log('Back button ditekan');
+      }
+    });
+    
+    // Deteksi klik yang mengarah keluar
+    document.addEventListener('click', function(e) {
+      // Check jika klik pada area iklan
+      let target = e.target;
+      while (target) {
+        if (target.tagName === 'IFRAME' || target.classList.contains('ad-container')) {
+          console.log('Klik terdeteksi pada iklan');
+          
+          // Push state baru untuk back button
+          setTimeout(function() {
+            if (window.location.href !== currentURL) {
+              history.pushState({page: 1}, null, currentURL);
+            }
+          }, 100);
+          break;
         }
-        
-        // Mencegah Ctrl+Shift+I/J
-        if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) {
-            return false;
-        }
-        
-        // Mencegah Ctrl+U
-        if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-            return false;
-        }
-    }
-    </script>
+        target = target.parentElement;
+      }
+    });
+  })();
+</script>
 
 	<!-- Histats.com  START  (aync)-->
 <script type="text/javascript">var _Hasync= _Hasync|| [];
