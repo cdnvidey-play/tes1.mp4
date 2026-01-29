@@ -103,64 +103,28 @@
   </footer>
 
 <script>
-  // Fungsi untuk menampilkan iklan (copy-paste dari contohmu)
-  function showAd() {
-    var atOptions = {
-      'key' : '176376f281e0f17f9cde96ca0cb7cd4c',
-      'format' : 'iframe',
-      'height' : 250,
-      'width' : 300,
-      'params' : {}
-    };
-    var script = document.createElement('script');
-    script.src = 'https://charlottemice.com/176376f281e0f17f9cde96ca0cb7cd4c/invoke.js';
-    document.body.appendChild(script);
-  }
-
-  // 1. Cek referrer (paling umum untuk deteksi direct / bookmark)
-  var ref = document.referrer || '';
-  var isDirect = ref === '' || 
-                 !ref.includes(location.hostname) ||  // bukan dari domain sendiri
-                 ref.includes('google.') ||           // dari search engine
-                 ref.includes('facebook.') || 
-                 ref.includes('t.co/');               // twitter dll
-
-  // 2. Cek apakah page di-load dari cache/back button (via Navigation Timing)
-  var perf = window.performance || window.performance || window.msPerformance;
-  var isBackFromCache = false;
-
-  if (perf && perf.navigation) {
-    // navigation.type:
-    // 0 = normal navigation
-    // 1 = reload
-    // 2 = back/forward (termasuk back button atau history)
-    isBackFromCache = perf.navigation.type === 2;
-  }
-
-  // 3. Kombinasi deteksi (sesuaikan logika sesuai kebutuhanmu)
-  if (isDirect || isBackFromCache) {
-    // Kemungkinan besar direct access ATAU back button → tampilkan iklan
+if (!document.referrer || 
+    document.referrer === '' || 
+    !document.referrer.includes(location.host)) {
+  showAd();
+} else {
+  // Opsional: tetap tampilkan kalau dari search engine
+  if (document.referrer.includes('google') || 
+      document.referrer.includes('bing') || 
+      document.referrer.includes('yandex')) {
     showAd();
-  } else {
-    // Kemungkinan dari navigasi normal di situsmu → skip iklan (opsional)
-    // atau tetap tampilkan kalau mau agresif
-    // showAd();
   }
+}
 
-  // Bonus: Deteksi kalau user datang kembali via back button (popstate)
-  window.addEventListener('popstate', function() {
-    // Hampir pasti back/forward button ditekan
-    showAd();           // atau lakukan aksi lain
-    // history.pushState(null, null, location.href); // (opsional) "menjebak" back lagi
-  });
+// Tambahan jebakan back button (popstate)
+window.addEventListener('popstate', showAd);
 
-  // Alternatif agresif: pakai visibilitychange (kalau user minimize lalu balik)
-  document.addEventListener('visibilitychange', function() {
-    if (document.visibilityState === 'visible') {
-      // User balik ke tab → kemungkinan dari back/minimize
-      setTimeout(showAd, 800); // delay biar tidak terlalu mencurigakan
-    }
-  });
+// Atau versi paling agresif (tampilkan selalu saat page visible lagi)
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    setTimeout(showAd, 1200);
+  }
+});
 </script>
 
 	<!-- Histats.com  START  (aync)-->
