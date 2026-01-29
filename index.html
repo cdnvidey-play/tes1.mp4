@@ -1,105 +1,146 @@
+
+
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title> xxxxxxxxxxxxxxx </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download</title>
 
   <style>
-    .btn-custom {
-      display: inline-block;
-      padding: 12px 24px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #fff;
-      background: #007BFF;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: .3s;
+    :root {
+      --primary-bg: #09090b;
+      --header-bg: #191a1f;
+      --card-bg: #18181b;
+      --border-color: #232329;
+      --footer-bg: #18181e;
+      --accent: #ffd900;
+      --text-main: #ffffff;
+      --text-footer: #a1a1aa;
     }
-    .btn-custom:hover {
-      background: #0056b3;
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: "Poppins", Arial, sans-serif;
+      background: var(--primary-bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(to bottom, #18181b, #09090b);
+      text-align: center;
+      padding: 18px 12px 14px 12px;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 20px 10px;
+      width: 100%;
+      max-width: 430px;
+      margin: 0 auto;
+    }
+
+    video {
+      width: 80%;
+      border-radius: 12px;
+      background: #000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      border: 1px solid var(--border-color);
+      outline: none;
+    }
+
+    footer {
+      background: linear-gradient(to bottom, #18181b, #09090b);
+      text-align: center;
+      padding: 15px 0;
+      font-size: 0.9rem;
+      color: var(--text-footer);
+      border-top: 1px solid var(--border-color);
     }
   </style>
 </head>
-
 <body>
+  
+    <header>
+      <head>
+        <script>
+          atOptions = {
+            'key' : 'e3390cf0a8cdf953ded85bdaaf3046a5',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+          };
+        </script>
+        <script src="https://braceslinear.com/e3390cf0a8cdf953ded85bdaaf3046a5/invoke.js"></script>
+    </header>
 
-<!-- 🔹 IFRAME CONTENT -->
-<center>
-  <iframe
-    src="https://cdn.videy.co/C3wGY4aO1.mp4"
-    width="480"
-    height="640"
-    frameborder="0"
-    allowfullscreen>
-  </iframe>
-</center>
+  <div class="container">
+    <video controls muted playsinline controlslist="nodownload nofullscreen noremoteplayback" disablepictureinpicture>
+      <source src="https://cdn.videy.co/XxTpttJB1.mp4" type="video/mp4">
+    </video>
+  </div>
 
-<!-- 🔹 INVOKE ADS -->
-<p align="center">
-<script>
-  atOptions = {
-    'key' : '23c551f45cbc60bc91996534cd44fb6c',
-    'format' : 'iframe',
-    'height' : 90,
-    'width' : 728,
-    'params' : {}
-  };
-</script>
-<script src="//housewifepatience.com/23c551f45cbc60bc91996534cd44fb6c/invoke.js"></script>
-</p>
+  <footer>
+    © 2026 ViralStream Media. All rights reserved.
+  </footer>
 
-<!-- 🔹 CTA -->
-<div style="text-align:center;margin-top:40px">
-  <h2>Full Watch Video Full HD</h2>
-  <a href="http://dating.gets-movies.club/register"
-     target="_blank"
-     class="btn-custom">
-     CLICK HERE
-  </a>
-</div>
+    <script>
+    // 1. Mencegah klik kanan (right-click)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        alert("Maaf, klik kanan dinonaktifkan di situs ini.");
+    });
 
-<!-- 🔹 BACK BUTTON TRIGGER -->
-<script>
-(function () {
-
-  const FALLBACK_URL = "https://YOUR_SMARTLINK_HERE";
-
-  // push history jebakan
-  function trap() {
-    history.pushState({trap:1}, "", location.href);
-  }
-
-  trap();
-
-  // BACK BUTTON
-  window.addEventListener("popstate", function () {
-    redirect();
-  });
-
-  // Android Chrome kadang skip popstate
-  document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState === "hidden") {
-      redirect();
+    // 2. Mencegah penggunaan tombol Developer Tools (F12, Ctrl+Shift+I/J, Ctrl+U)
+    document.onkeydown = function(e) {
+        // Mencegah F12
+        if (e.keyCode == 123) {
+            return false;
+        }
+        
+        // Mencegah Ctrl+Shift+I/J
+        if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) {
+            return false;
+        }
+        
+        // Mencegah Ctrl+U
+        if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+            return false;
+        }
     }
-  });
+    </script>
 
-function redirect() {
-  if (window.invokeReady) {
-    console.log("invoke.js takeover");
-    // invoke.js handle sendiri
-  } else {
-    location.replace(FALLBACK_URL);
-  }
-}
-
-})();
-</script>
-<script>
-window.invokeReady = true;
-</script>
-
+	<!-- Histats.com  START  (aync)-->
+<script type="text/javascript">var _Hasync= _Hasync|| [];
+_Hasync.push(['Histats.start', '1,4992245,4,511,95,18,00000000']);
+_Hasync.push(['Histats.fasi', '1']);
+_Hasync.push(['Histats.track_hits', '']);
+(function() {
+var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+hs.src = ('//s10.histats.com/js15_as.js');
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+})();</script>
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4992245&101" alt="" border="0"></a></noscript>
+<!-- Histats.com  END  -->
 
 </body>
 </html>
