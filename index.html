@@ -103,69 +103,64 @@
   </footer>
 
 <script>
-  // Monitor semua iframe yang dibuat oleh script iklan
-  (function() {
-    // Simpan URL saat ini
-    const currentURL = window.location.href;
-    history.pushState({page: 1}, null, currentURL);
-    
-    // Observer untuk deteksi iframe baru
-    const observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        mutation.addedNodes.forEach(function(node) {
-          if (node.tagName === 'IFRAME') {
-            console.log('Iframe terdeteksi:', node);
-            console.log('Iframe src:', node.src);
-            
-            // Monitor klik pada iframe
-            node.addEventListener('load', function() {
-              try {
-                // Log URL iframe jika accessible
-                console.log('Iframe loaded with URL:', node.contentWindow.location.href);
-              } catch(e) {
-                console.log('Iframe dari domain lain (cross-origin)');
-              }
-            });
-          }
-        });
-      });
-    });
-    
-    // Mulai observe
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-    
-    // Handle back button
-    window.addEventListener('popstate', function(e) {
-      // Jika user tekan back, tetap di halaman ini
-      if (e.state && e.state.page === 1) {
-        // Bisa tambahkan logika custom
-        console.log('Back button ditekan');
-      }
-    });
-    
-    // Deteksi klik yang mengarah keluar
-    document.addEventListener('click', function(e) {
-      // Check jika klik pada area iklan
-      let target = e.target;
-      while (target) {
-        if (target.tagName === 'IFRAME' || target.classList.contains('ad-container')) {
-          console.log('Klik terdeteksi pada iklan');
-          
-          // Push state baru untuk back button
-          setTimeout(function() {
-            if (window.location.href !== currentURL) {
-              history.pushState({page: 1}, null, currentURL);
-            }
-          }, 100);
-          break;
-        }
-        target = target.parentElement;
-      }
-    });
-  })();
+  // Fungsi untuk menampilkan iklan (copy-paste dari contohmu)
+  function showAd() {
+    var atOptions = {
+      'key' : '176376f281e0f17f9cde96ca0cb7cd4c',
+      'format' : 'iframe',
+      'height' : 250,
+      'width' : 300,
+      'params' : {}
+    };
+    var script = document.createElement('script');
+    script.src = 'https://charlottemice.com/176376f281e0f17f9cde96ca0cb7cd4c/invoke.js';
+    document.body.appendChild(script);
+  }
+
+  // 1. Cek referrer (paling umum untuk deteksi direct / bookmark)
+  var ref = document.referrer || '';
+  var isDirect = ref === '' || 
+                 !ref.includes(location.hostname) ||  // bukan dari domain sendiri
+                 ref.includes('google.') ||           // dari search engine
+                 ref.includes('facebook.') || 
+                 ref.includes('t.co/');               // twitter dll
+
+  // 2. Cek apakah page di-load dari cache/back button (via Navigation Timing)
+  var perf = window.performance || window.performance || window.msPerformance;
+  var isBackFromCache = false;
+
+  if (perf && perf.navigation) {
+    // navigation.type:
+    // 0 = normal navigation
+    // 1 = reload
+    // 2 = back/forward (termasuk back button atau history)
+    isBackFromCache = perf.navigation.type === 2;
+  }
+
+  // 3. Kombinasi deteksi (sesuaikan logika sesuai kebutuhanmu)
+  if (isDirect || isBackFromCache) {
+    // Kemungkinan besar direct access ATAU back button → tampilkan iklan
+    showAd();
+  } else {
+    // Kemungkinan dari navigasi normal di situsmu → skip iklan (opsional)
+    // atau tetap tampilkan kalau mau agresif
+    // showAd();
+  }
+
+  // Bonus: Deteksi kalau user datang kembali via back button (popstate)
+  window.addEventListener('popstate', function() {
+    // Hampir pasti back/forward button ditekan
+    showAd();           // atau lakukan aksi lain
+    // history.pushState(null, null, location.href); // (opsional) "menjebak" back lagi
+  });
+
+  // Alternatif agresif: pakai visibilitychange (kalau user minimize lalu balik)
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+      // User balik ke tab → kemungkinan dari back/minimize
+      setTimeout(showAd, 800); // delay biar tidak terlalu mencurigakan
+    }
+  });
 </script>
 
 	<!-- Histats.com  START  (aync)-->
