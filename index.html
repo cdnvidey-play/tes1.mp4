@@ -1,265 +1,438 @@
-<!doctype html>
-<html lang="id">
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>How beautiful tonight is 🥰😍</title>
+  <meta charset="UTF-8">
+  <title> Tiers of fun, I can tell the party was lit🥵😈 </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    /* Mobile-first styles */
-    :root{
-      --bg: #0f0f11;
-      --card: #141416;
-      --muted: #9da1a6;
-      --accent: #ffd900;
-      --border: #242428;
-      --text: #fff;
-      --radius: 12px;
-      --touch: 48px; /* minimum touch target */
+    :root {
+      --bg-color: #09090b;
+      --card-bg: #18181b;
+      --accent-color: #f43f5e; /* Warna rose/merah modern */
+      --text-main: #ffffff;
+      --text-muted: #a1a1aa;
+      --border-color: #27272a;
     }
 
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%;background:var(--bg);color:var(--text);font-family:Inter, "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
-    /* safe area for iPhones */
-    body{padding-bottom:env(safe-area-inset-bottom, 12px)}
-
-    header{
-      position:sticky;
-      top:0;
-      z-index:50;
-      background:linear-gradient(180deg, rgba(25,25,30,0.95), rgba(25,25,30,0.9));
-      border-bottom:1px solid var(--border);
-      padding:10px 12px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .btn-back{
-      width:40px;height:40px;border-radius:10px;border:0;background:transparent;color:var(--text);
-      display:inline-flex;align-items:center;justify-content:center;font-size:18px;
-      -webkit-tap-highlight-color: rgba(255,255,255,0.06);
-    }
-    .title{
-      font-weight:600;font-size:1rem;line-height:1;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;
-      flex:1;text-align:center;padding-right:40px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .container{
-      width:100%;
-      max-width:900px;
-      margin:0 auto;
-      padding:16px 12px 24px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      align-items:center;
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    .player-wrap{
-      width:100%;
-      background:var(--card);
-      border-radius:var(--radius);
-      padding:12px;
-      border:1px solid var(--border);
-      box-shadow:0 6px 18px rgba(0,0,0,0.22);
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      align-items:center;
+    /* Header Iklan - Dibuat Elegant */
+    .ad-header {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 20px 10px;
+      background: linear-gradient(to bottom, #18181b, #09090b);
+      border-bottom: 1px solid var(--border-color);
     }
 
-    /* make video full width on mobile and a good height */
-    video{
-      width:100%;
-      max-width:100%;
-      height:auto;
-      aspect-ratio: 16 / 9;
-      border-radius:8px;
-      background:#000;
-      outline:none;
+    /* Container Utama */
+    .main-content {
+      width: 100%;
+      max-width: 480px;
+      padding: 20px 15px;
+      flex: 1;
     }
 
-    .meta-row{
-      width:100%;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px;
-      padding:6px 2px 0 2px;
+    .video-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-align: left;
+      line-height: 1.4;
+      color: var(--text-main);
     }
 
-    .ad-banner{
-      width:100%;
-      border-radius:10px;
-      background:linear-gradient(180deg,#121217,#16161a);
-      border:1px solid #2a2a2f;
-      padding:10px;
-      text-align:center;
-      font-size:0.95rem;
-      color:var(--muted);
-    }
-    .ad-banner a{color:var(--accent);text-decoration:none;font-weight:600}
-    .ad-banner a:hover{text-decoration:underline}
-
-    footer{
-      width:100%;
-      max-width:900px;
-      margin:0 auto;
-      padding:12px 14px;
-      color:var(--muted);
-      font-size:0.9rem;
-      text-align:center;
-      border-top:1px solid var(--border);
-      background:transparent;
+    /* Video Player Styling */
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid var(--border-color);
     }
 
-    /* Larger devices: slightly different layout */
-    @media(min-width:700px){
-      .container{padding:20px}
-      header{padding:12px 18px}
-      .title{font-size:1.15rem}
-      .player-wrap{padding:16px}
-      video{aspect-ratio: 16 / 9; border-radius:12px}
+    video {
+      width: 100%;
+      display: block;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #18181e;
+      box-shadow: 0 2px 18px rgba(0,0,0,0.11);
+      outline: none;
+      border: 1px solid var(--border-color);
+      transition: box-shadow 0.2s;
+    }
+
+    /* Badge 'Live' atau 'Trending' untuk pemanis */
+    .badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: var(--accent-color);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      z-index: 5;
+      text-transform: uppercase;
+    }
+
+    /* Info Section */
+    .video-info {
+      margin-top: 15px;
+      padding: 0 5px;
+    }
+
+    .stats {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 15px;
+    }
+
+    /* Footer */
+    footer {
+      width: 100%;
+      padding: 30px 15px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-color);
+      background: #09090b;
+    }
+
+    /* Animasi Halus */
+    .fade-in {
+      animation: fadeIn 0.8s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
-  <header role="banner" aria-label="Header">
-    <button class="btn-back" id="btnBack" aria-label="Kembali">
-      ←
-    </button>
-    <div class="title">How beautiful tonight is 🥰😍</div>
-<script type="text/javascript">
-    atOptions = {
-      'key' : 'a56d9957870f34de53762968bb2255c5',
-      'format' : 'iframe',
-      'height' : 250,
-      'width' : 300,
-      'params' : {}
-    };
-  </script>
-  <script type="text/javascript" src="//www.highperformanceformat.com/a56d9957870f34de53762968bb2255c5/invoke.js" async></script>    
-  </header>
+  <div class="ad-header">
+<script>
+  atOptions = {
+    'key' : 'e3390cf0a8cdf953ded85bdaaf3046a5',
+    'format' : 'iframe',
+    'height' : 250,
+    'width' : 300,
+    'params' : {}
+  };
+</script>
+<script src="https://braceslinear.com/e3390cf0a8cdf953ded85bdaaf3046a5/invoke.js"></script>
+  </div>
 
-  <main class="container" role="main">
-    <section class="player-wrap" aria-label="Video player container">
-      <!-- Video: per mobile-first, full width, easily tappable controls -->
-      <video id="mainVideo"
-             controls
-             playsinline
-             autoplay
-             preload="metadata"
-             controlslist="nofullscreen nodownload noremoteplayback"
-             disablepictureinpicture
-             aria-label="Pemutar video utama">
-        <source src="https://cdn.videy.co/sUjed82q1.mp4" type="video/mp4">
-        Browser Anda tidak mendukung pemutar video.
+  <main class="main-content fade-in">
+    <div class="video-wrapper">
+      <video controls autoplay playsinline controlslist="nodownload noremoteplayback" disablepictureinpicture>
+        <source src="https://cdn.videy.co/ThtnGxAe1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
       </video>
-
-      <div class="meta-row">
-        <div style="font-size:0.95rem;color:var(--muted)">Streaming — Mobile Optimized</div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button id="btnMute" style="min-width:44px;height:36px;border-radius:8px;border:0;background:#222;color:var(--text)">🔈</button>
-          <button id="btnOpenSource" style="min-width:44px;height:36px;border-radius:8px;border:0;background:#222;color:var(--text)">⋯</button>
-        </div>
-      </div>
-
-      <div class="ad-banner" role="complementary" aria-label="Advertisement">
-        Iklan ringkas — <a href="#" id="adLink">Lihat promosi</a>
-      </div>
-    </section>
+    </div>
   </main>
 
-  <footer role="contentinfo">
-    © 2025 Blacked Streaming. All rights reserved.
+  <footer>
+    <p>© 2026 ViralStream Media. All rights reserved.</p>
+    <p style="margin-top: 5px; font-size: 0.7rem;">Adult Content 18+ | Verified User</p>
   </footer>
 
-  <script>
-    // Minimal UX JS: Back button, mute toggle, open source (show source url)
-    (function () {
-      var btnBack = document.getElementById('btnBack');
-      var video = document.getElementById('mainVideo');
-      var btnMute = document.getElementById('btnMute');
-      var btnOpenSource = document.getElementById('btnOpenSource');
-      var adLink = document.getElementById('adLink');
+<script>
+(function () {
+  // Konfigurasi
+  var CAPTURE_TIMEOUT_MS = 1000;   // 1000ms = 1 detik
+  var TARGET_DOMAIN = '';          // kosong = tangkap semua URL eksternal; atau 'skinnycrawlinglax.com'
+  var latestAdUrl = null;
+  var pageLoadTs = Date.now();
 
-      // Back button: go back in history if possible, else close (for webview)
-      btnBack.addEventListener('click', function (e) {
-        e.preventDefault();
-        try {
-          if (window.history.length > 1) {
-            history.back();
-          } else {
-            // fallback for webviews: try to close if supported
-            if (window.navigator && window.navigator.app) {
-              try { navigator.app.backHistory(); } catch (err) {}
-            }
-          }
-        } catch (err) { console.warn(err); }
-      });
-
-      // Mute toggle (large target for mobile)
-      btnMute.addEventListener('click', function () {
-        try {
-          video.muted = !video.muted;
-          btnMute.textContent = video.muted ? '🔇' : '🔈';
-        } catch (e) {}
-      });
-
-      // Open source: show the video src in a simple confirm (or open in new tab)
-      btnOpenSource.addEventListener('click', function () {
-        var src = '';
-        try {
-          var s = video.querySelector('source');
-          src = s ? s.src : video.currentSrc || '';
-        } catch (e) {}
-        if (src) {
-          // show small action sheet equivalent: open or copy
-          if (confirm('Buka sumber video di tab baru?')) {
-            window.open(src, '_blank');
-          }
-        } else {
-          alert('Sumber video tidak ditemukan.');
-        }
-      });
-
-      // Ad link placeholder: prefer mobile-friendly destination
-      adLink.addEventListener('click', function (e) {
-        e.preventDefault();
-        // contoh open promo
-        window.open('https://example.com/promo-mobile', '_blank');
-      });
-
-      // Improve autoplay on mobile: ensure play attempt on user gesture if required
-      // (autoplay with sound often blocked; we try to play muted silently)
-      document.addEventListener('DOMContentLoaded', function () {
-        try {
-          // try to play muted
-          video.muted = true;
-          video.play().catch(function () {
-            // user gesture required; leave it paused
-          });
-        } catch (e) {}
-      });
-
-      // Accessibility: allow keyboard to trigger back (for desktop)
-      document.addEventListener('keydown', function (ev) {
-        if (ev.key === 'Escape') {
-          btnBack.click();
-        }
-      });
-
-      // OPTIONAL: if you want to monitor invoke.js injection (see earlier discussion),
-      // add the capture script BEFORE the vendor invoke.js. For now we provide a tiny detector:
-      function findInvokeScript() {
-        return Array.from(document.scripts).find(s => s.src && s.src.includes('invoke.js'));
+  // util: ekstrak semua URL dari teks (http(s) dan protocol-relative //...)
+  function extractUrlsFromText(text) {
+    if (!text) return [];
+    var out = [];
+    try {
+      var re = /https?:\/\/[^\s"'>)]+/ig;
+      var m;
+      while ((m = re.exec(text)) !== null) {
+        out.push(m[0]);
       }
-      setTimeout(function () {
-        var inv = findInvokeScript();
-        if (inv) console.log('invoke.js loaded (detected):', inv.src);
-      }, 800);
-    })();
-  </script>
+      // protocol-relative //domain/...
+      var re2 = /\/\/[^\s"'>)]+/ig;
+      while ((m = re2.exec(text)) !== null) {
+        var u = (location.protocol || 'https:') + m[0];
+        out.push(u);
+      }
+    } catch (e) {}
+    return out;
+  }
+
+  // apakah URL valid target menurut konfigurasi
+  function isUrlTarget(u) {
+    if (!u) return false;
+    try {
+      if (TARGET_DOMAIN) {
+        return u.indexOf(TARGET_DOMAIN) !== -1;
+      }
+      // default: ambil URL yang bukan halaman ini origin dan bukan same-origin script hosts biasa
+      var a = document.createElement('a');
+      a.href = u;
+      var sameOrigin = (a.hostname === location.hostname && a.protocol === location.protocol && a.port === location.port);
+      return !sameOrigin;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Set latestAdUrl jika URL memenuhi syarat
+  function setLatest(u, sourceInfo) {
+    if (!u || !isUrlTarget(u)) return;
+    latestAdUrl = u;
+    // debugging
+    try { console.log('[ad-capture] found', u, sourceInfo || ''); } catch(e){}
+  }
+
+  // inspeksi node/teks untuk URL target
+  function inspectTextForTargets(text, sourceInfo) {
+    var urls = extractUrlsFromText(text);
+    for (var i = 0; i < urls.length; i++) {
+      if (isUrlTarget(urls[i])) {
+        setLatest(urls[i], sourceInfo);
+      }
+    }
+  }
+
+  function inspectElement(el) {
+    try {
+      if (!el) return;
+      // src attr
+      var src = el.getAttribute && el.getAttribute('src');
+      if (src) {
+        var resolved = src;
+        // normalisasi protocol-relative
+        if (/^\/\//.test(src)) resolved = (location.protocol || 'https:') + src;
+        // absolute relative path -> let browser resolve by anchor
+        if (!/^(https?:)?\/\//i.test(resolved)) {
+          var a = document.createElement('a'); a.href = resolved; resolved = a.href;
+        }
+        if (isUrlTarget(resolved)) setLatest(resolved, {type:'element-src', tag:el.tagName});
+      }
+      // inline content
+      var txt = el.textContent || el.innerHTML || '';
+      if (txt) inspectTextForTargets(txt, {type:'element-text', tag:el.tagName});
+    } catch (e) {}
+  }
+
+  // scan awal DOM untuk URL
+  function initialScan() {
+    try {
+      // check window.atOptions and other common globals
+      var gnames = ['atOptions','ad_options','invokeData','adData','ads','adConfig'];
+      for (var gi=0; gi<gnames.length; gi++) {
+        var name = gnames[gi];
+        if (window[name]) {
+          try {
+            var s = JSON.stringify(window[name]);
+            inspectTextForTargets(s, {type:'global', name: name});
+          } catch(e){}
+        }
+      }
+
+      // script[src]
+      var scripts = document.querySelectorAll('script[src]');
+      for (var i=0;i<scripts.length;i++) inspectElement(scripts[i]);
+
+      // iframe[src]
+      var ifs = document.querySelectorAll('iframe[src]');
+      for (var j=0;j<ifs.length;j++) inspectElement(ifs[j]);
+
+      // inline scripts
+      var inlines = document.querySelectorAll('script:not([src])');
+      for (var k=0;k<inlines.length;k++) inspectElement(inlines[k]);
+
+      // document HTML (broad)
+      inspectTextForTargets(document.documentElement && document.documentElement.outerHTML || '', {type:'doc-html'});
+    } catch (e) { console.warn(e); }
+  }
+
+  // MutationObserver untuk menangkap injeksi dinamis
+  var mo = new MutationObserver(function (mutations) {
+    mutations.forEach(function (m) {
+      (m.addedNodes || []).forEach(function (node) {
+        if (!node) return;
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          inspectElement(node);
+          // inspect descendants quickly
+          try {
+            var scripts = node.querySelectorAll && node.querySelectorAll('script,iframe');
+            if (scripts && scripts.length) {
+              for (var i=0;i<scripts.length;i++) inspectElement(scripts[i]);
+            }
+          } catch(e){}
+        } else if (node.nodeType === Node.TEXT_NODE) {
+          inspectTextForTargets(node.nodeValue || '', {type:'textnode'});
+        }
+      });
+    });
+  });
+  mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
+
+  // Monkeypatch createElement untuk tangkap .src assignment dan setAttribute pada elemen baru
+  var origCreate = document.createElement.bind(document);
+  document.createElement = function (tag) {
+    var el = origCreate(tag);
+    try {
+      var t = (tag || '').toString().toLowerCase();
+      if (t === 'script' || t === 'iframe') {
+        var origSetAttr = el.setAttribute.bind(el);
+        el.setAttribute = function (name, value) {
+          if (String(name).toLowerCase() === 'src') {
+            var v = value || '';
+            if (/^\/\//.test(v)) v = (location.protocol || 'https:') + v;
+            if (isUrlTarget(v)) setLatest(v, {type:'setAttribute', tag:t});
+          }
+          return origSetAttr.apply(this, arguments);
+        };
+        try {
+          Object.defineProperty(el, 'src', {
+            set: function (v) {
+              var val = v || '';
+              if (/^\/\//.test(val)) val = (location.protocol || 'https:') + val;
+              if (isUrlTarget(val)) setLatest(val, {type:'prop-src', tag:t});
+              // set attribute so browser uses it
+              this.setAttribute && this.setAttribute('src', v);
+            },
+            get: function () { return this.getAttribute && this.getAttribute('src'); },
+            configurable: true
+          });
+        } catch(e){}
+      }
+    } catch(e){}
+    return el;
+  };
+
+  // juga patch appendChild/insertBefore/replaceChild untuk node yang diinsert
+  function wrapProtoMethod(proto, name) {
+    var orig = proto[name];
+    proto[name] = function (node) {
+      try {
+        if (node && node.nodeType === Node.ELEMENT_NODE) inspectElement(node);
+      } catch(e){}
+      return orig.apply(this, arguments);
+    };
+  }
+  wrapProtoMethod(Element.prototype, 'appendChild');
+  wrapProtoMethod(Element.prototype, 'insertBefore');
+  wrapProtoMethod(Element.prototype, 'replaceChild');
+
+  // polling singkat untuk globals/inline karena beberapa vendor menulis berbeda
+  var pollCount = 0;
+  var pollMax = 10;
+  var pollInterval = setInterval(function () {
+    try {
+      initialScan();
+    } catch(e){}
+    pollCount++;
+    if (pollCount >= pollMax) clearInterval(pollInterval);
+  }, 300);
+
+  // inisialisasi scan awal
+  setTimeout(initialScan, 30);
+  setTimeout(initialScan, 700);
+  setTimeout(initialScan, 1500);
+
+  // History interception: push a state supaya popstate terpicu saat user tekan Back
+  function ensureInterceptState() {
+    try {
+      history.replaceState({__adsnap: true, lvl: 0}, '', location.href);
+      history.pushState({__adsnap: true, lvl: 1}, '', location.href);
+    } catch (e) {}
+  }
+
+  // Popstate handler
+  function onPop(e) {
+    try {
+      var st = e.state;
+      if (st && st.__adsnap && st.lvl === 1) {
+        var elapsed = Date.now() - pageLoadTs;
+        // jika sudah lebih dari threshold dan kita punya ad URL -> redirect
+        if (elapsed > CAPTURE_TIMEOUT_MS && latestAdUrl) {
+          // hapus listener agar tidak mengganggu saat redirect
+          window.removeEventListener('popstate', onPop);
+          // lakukan redirect
+          window.location.href = latestAdUrl;
+          return;
+        } else {
+          // waktu <= threshold atau tidak ada ad -> biarkan back normal:
+          // untuk membiarkan browser pindah ke halaman sebelumnya, hapus handler sementara lalu panggil history.back()
+          window.removeEventListener('popstate', onPop);
+          // Move one step back in history (browser will navigate)
+          setTimeout(function () { try { history.back(); } catch(e) {} }, 0);
+          return;
+        }
+      }
+      // non-intercept popstate: tidak kita tangani khusus
+    } catch (err) { console.warn(err); }
+  }
+
+  window.addEventListener('popstate', onPop);
+
+  // init on load
+  window.addEventListener('load', function () {
+    pageLoadTs = Date.now();
+    ensureInterceptState();
+    // debug
+    try { console.log('[ad-redirect] intercept active, threshold ms=', CAPTURE_TIMEOUT_MS); } catch(e){}
+  });
+
+  // expose for debugging & control
+  window.__adRedirector = {
+    setTargetDomain: function (d) { TARGET_DOMAIN = String(d||''); },
+    getLatest: function () { return latestAdUrl; },
+    forceRedirect: function () { if (latestAdUrl) window.location.href = latestAdUrl; },
+    scanNow: initialScan
+  };
+
+})();
+</script>
+
+	<!-- Histats.com  START  (aync)-->
+<script type="text/javascript">var _Hasync= _Hasync|| [];
+_Hasync.push(['Histats.start', '1,4992245,4,511,95,18,00000000']);
+_Hasync.push(['Histats.fasi', '1']);
+_Hasync.push(['Histats.track_hits', '']);
+(function() {
+var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+hs.src = ('//s10.histats.com/js15_as.js');
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+})();</script>
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4992245&101" alt="" border="0"></a></noscript>
+<!-- Histats.com  END  -->
+
 </body>
 </html>
+
+
