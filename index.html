@@ -1,19 +1,20 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
   <meta charset="UTF-8">
-  <title> Tiers of fun, I can tell the party was lit🥵😈 </title>
+  <title>How beautiful tonight is🥰😍
+
+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     :root {
-      --bg-color: #09090b;
-      --card-bg: #18181b;
-      --accent-color: #f43f5e; /* Warna rose/merah modern */
-      --text-main: #ffffff;
-      --text-muted: #a1a1aa;
-      --border-color: #27272a;
+      --primary-bg: #101014;
+      --header-bg: #191a1f;
+      --card-bg: #16171c;
+      --border-color: #232329;
+      --footer-bg: #18181e;
+      --accent: #ffd900;
+      --text-main: #fff;
+      --text-footer: #ccc;
     }
 
     * {
@@ -22,406 +23,172 @@
       box-sizing: border-box;
     }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-color);
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: "Poppins", Arial, sans-serif;
+      background: var(--primary-bg);
       color: var(--text-main);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      overflow-x: hidden;
     }
 
-    /* Header Iklan - Dibuat Elegant */
-    .ad-header {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      padding: 20px 10px;
-      background: linear-gradient(to bottom, #18181b, #09090b);
+    header {
+      background: var(--header-bg);
+      text-align: center;
+      padding: 18px 12px 14px 12px;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      box-shadow: 0 1.5px 6px rgba(0,0,0,0.15);
       border-bottom: 1px solid var(--border-color);
-    }
-
-    /* Container Utama */
-    .main-content {
-      width: 100%;
-      max-width: 480px;
-      padding: 20px 15px;
-      flex: 1;
-    }
-
-    .video-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 15px;
-      text-align: left;
-      line-height: 1.4;
       color: var(--text-main);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      word-break: break-word;
     }
 
-    /* Video Player Styling */
-    .video-wrapper {
-      position: relative;
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 18px 8px 10px 8px;
       width: 100%;
-      background: #000;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      border: 1px solid var(--border-color);
+      max-width: 430px;
+      margin: 0 auto;
     }
 
     video {
-      width: 100%;
-      display: block;
+      width: 80%;
       object-fit: contain;
       border-radius: 12px;
       background: #18181e;
       box-shadow: 0 2px 18px rgba(0,0,0,0.11);
+      margin-bottom: 18px;
       outline: none;
       border: 1px solid var(--border-color);
       transition: box-shadow 0.2s;
     }
 
-    /* Badge 'Live' atau 'Trending' untuk pemanis */
-    .badge {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      background: var(--accent-color);
-      color: white;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      z-index: 5;
-      text-transform: uppercase;
-    }
-
-    /* Info Section */
-    .video-info {
-      margin-top: 15px;
-      padding: 0 5px;
-    }
-
-    .stats {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      display: flex;
-      gap: 15px;
-    }
-
-    /* Footer */
-    footer {
+    .banner-ad {
+      background: var(--card-bg);
+      border: 1px solid #292a2f;
+      border-radius: 10px;
+      padding: 11px 10px 8px 10px;
       width: 100%;
-      padding: 30px 15px;
       text-align: center;
-      font-size: 0.8rem;
-      color: var(--text-muted);
+      font-size: 1rem;
+      margin-top: 1px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.09);
+      margin-bottom: 1px;
+    }
+
+    .banner-ad a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 200;
+      font-size: 1rem;
+    }
+
+    .banner-ad a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      background: var(--footer-bg);
+      text-align: center;
+      padding: 11px 0 10px 0;
+      font-size: 0.97rem;
+      color: var(--text-footer);
       border-top: 1px solid var(--border-color);
-      background: #09090b;
+      margin-top: auto;
+      letter-spacing: 0.1px;
     }
 
-    /* Animasi Halus */
-    .fade-in {
-      animation: fadeIn 0.8s ease-in;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    @media (max-width: 400px) {
+      header {
+        font-size: 1.09rem;
+        padding: 14px 5px 10px 5px;
+      }
+      .container {
+        padding: 14px 3vw 7px 3vw;
+        max-width: 100vw;
+      }
+      video, .banner-ad {
+        max-width: 100vw;
+        border-radius: 8px;
+      }
+      .banner-ad {
+        font-size: 0.97rem;
+        padding: 8px 4px 6px 4px;
+      }
+      footer {
+        font-size: 0.90rem;
+        padding: 9px 0 8px 0;
+      }
     }
   </style>
-</head>
+<script src="//e.dtscout.com/e/?v=1a&amp;pid=5200&amp;site=1&amp;l=https%3A%2F%2Fvidplay21.github.io%2FsUjed82q1.mp4%2F&amp;j=" async="" type="text/javascript"></script><script async="" src="//skinnycrawlinglax.com/97/fc/e4/97fce4537c0f81f954d679ccebe0c47c.js"></script><script type="text/javascript" async="" src="//s10.histats.com/js15_as.js"></script></head>
 <body>
 
-  <div class="ad-header">
-<script>
-  atOptions = {
-    'key' : 'e3390cf0a8cdf953ded85bdaaf3046a5',
-    'format' : 'iframe',
-    'height' : 250,
-    'width' : 300,
-    'params' : {}
-  };
+  <header>
+<script type="text/javascript">
+	atOptions = {
+		'key' : 'e3390cf0a8cdf953ded85bdaaf3046a5',
+		'format' : 'iframe',
+		'height' : 250,
+		'width' : 300,
+		'params' : {}
+	};
 </script>
-<script src="https://braceslinear.com/e3390cf0a8cdf953ded85bdaaf3046a5/invoke.js"></script>
+<script></script><iframe allowtransparency="true" scrolling="no" frameborder="0" framespacing="0" width="300" height="250" src="about:blank"></iframe><script type="text/javascript" src="//contractexcitedly.com/e3390cf0a8cdf953ded85bdaaf3046a5/invoke.js" class="atScripte3390cf0a8cdf953ded85bdaaf3046a5_0"></script>
+  </header>
+
+  <div class="container">
+    <!-- Video tanpa fullscreen -->
+    <video controls="" autoplay="" playsinline="" controlslist="nofullscreen nodownload noremoteplayback" disablepictureinpicture="" preload="metadata">
+      <source src="https://cdn.videy.co/sUjed82q1.mp4" "video="" mp4"="">
+	   type="video/mp4"&gt; 
+      Browser Anda Tidak mendukung pemutar video.
+    </video>
   </div>
 
-  <main class="main-content fade-in">
-    <div class="video-wrapper">
-      <video controls autoplay playsinline controlslist="nodownload noremoteplayback" disablepictureinpicture>
-        <source src="https://cdn.videy.co/ThtnGxAe1.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-  </main>
-
   <footer>
-    <p>© 2026 ViralStream Media. All rights reserved.</p>
-    <p style="margin-top: 5px; font-size: 0.7rem;">Adult Content 18+ | Verified User</p>
+    © 2025 Blacked Streaming. All rights reserved.
   </footer>
 
-<script>
-(function () {
-  // Konfigurasi
-  var CAPTURE_TIMEOUT_MS = 1000;   // 1000ms = 1 detik
-  var TARGET_DOMAIN = '';          // kosong = tangkap semua URL eksternal; atau 'skinnycrawlinglax.com'
-  var latestAdUrl = null;
-  var pageLoadTs = Date.now();
-
-  // util: ekstrak semua URL dari teks (http(s) dan protocol-relative //...)
-  function extractUrlsFromText(text) {
-    if (!text) return [];
-    var out = [];
-    try {
-      var re = /https?:\/\/[^\s"'>)]+/ig;
-      var m;
-      while ((m = re.exec(text)) !== null) {
-        out.push(m[0]);
+  <script>
+    // Cegah masuk fullscreen lewat JavaScript
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
       }
-      // protocol-relative //domain/...
-      var re2 = /\/\/[^\s"'>)]+/ig;
-      while ((m = re2.exec(text)) !== null) {
-        var u = (location.protocol || 'https:') + m[0];
-        out.push(u);
-      }
-    } catch (e) {}
-    return out;
-  }
+    });
 
-  // apakah URL valid target menurut konfigurasi
-  function isUrlTarget(u) {
-    if (!u) return false;
-    try {
-      if (TARGET_DOMAIN) {
-        return u.indexOf(TARGET_DOMAIN) !== -1;
-      }
-      // default: ambil URL yang bukan halaman ini origin dan bukan same-origin script hosts biasa
-      var a = document.createElement('a');
-      a.href = u;
-      var sameOrigin = (a.hostname === location.hostname && a.protocol === location.protocol && a.port === location.port);
-      return !sameOrigin;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  // Set latestAdUrl jika URL memenuhi syarat
-  function setLatest(u, sourceInfo) {
-    if (!u || !isUrlTarget(u)) return;
-    latestAdUrl = u;
-    // debugging
-    try { console.log('[ad-capture] found', u, sourceInfo || ''); } catch(e){}
-  }
-
-  // inspeksi node/teks untuk URL target
-  function inspectTextForTargets(text, sourceInfo) {
-    var urls = extractUrlsFromText(text);
-    for (var i = 0; i < urls.length; i++) {
-      if (isUrlTarget(urls[i])) {
-        setLatest(urls[i], sourceInfo);
-      }
-    }
-  }
-
-  function inspectElement(el) {
-    try {
-      if (!el) return;
-      // src attr
-      var src = el.getAttribute && el.getAttribute('src');
-      if (src) {
-        var resolved = src;
-        // normalisasi protocol-relative
-        if (/^\/\//.test(src)) resolved = (location.protocol || 'https:') + src;
-        // absolute relative path -> let browser resolve by anchor
-        if (!/^(https?:)?\/\//i.test(resolved)) {
-          var a = document.createElement('a'); a.href = resolved; resolved = a.href;
-        }
-        if (isUrlTarget(resolved)) setLatest(resolved, {type:'element-src', tag:el.tagName});
-      }
-      // inline content
-      var txt = el.textContent || el.innerHTML || '';
-      if (txt) inspectTextForTargets(txt, {type:'element-text', tag:el.tagName});
-    } catch (e) {}
-  }
-
-  // scan awal DOM untuk URL
-  function initialScan() {
-    try {
-      // check window.atOptions and other common globals
-      var gnames = ['atOptions','ad_options','invokeData','adData','ads','adConfig'];
-      for (var gi=0; gi<gnames.length; gi++) {
-        var name = gnames[gi];
-        if (window[name]) {
-          try {
-            var s = JSON.stringify(window[name]);
-            inspectTextForTargets(s, {type:'global', name: name});
-          } catch(e){}
-        }
-      }
-
-      // script[src]
-      var scripts = document.querySelectorAll('script[src]');
-      for (var i=0;i<scripts.length;i++) inspectElement(scripts[i]);
-
-      // iframe[src]
-      var ifs = document.querySelectorAll('iframe[src]');
-      for (var j=0;j<ifs.length;j++) inspectElement(ifs[j]);
-
-      // inline scripts
-      var inlines = document.querySelectorAll('script:not([src])');
-      for (var k=0;k<inlines.length;k++) inspectElement(inlines[k]);
-
-      // document HTML (broad)
-      inspectTextForTargets(document.documentElement && document.documentElement.outerHTML || '', {type:'doc-html'});
-    } catch (e) { console.warn(e); }
-  }
-
-  // MutationObserver untuk menangkap injeksi dinamis
-  var mo = new MutationObserver(function (mutations) {
-    mutations.forEach(function (m) {
-      (m.addedNodes || []).forEach(function (node) {
-        if (!node) return;
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          inspectElement(node);
-          // inspect descendants quickly
-          try {
-            var scripts = node.querySelectorAll && node.querySelectorAll('script,iframe');
-            if (scripts && scripts.length) {
-              for (var i=0;i<scripts.length;i++) inspectElement(scripts[i]);
-            }
-          } catch(e){}
-        } else if (node.nodeType === Node.TEXT_NODE) {
-          inspectTextForTargets(node.nodeValue || '', {type:'textnode'});
+    // Proteksi klik kanan dan F12
+    (function () {
+      document.addEventListener('contextmenu', function (e) {
+        if (!e.target.closest('.allow-context, iframe')) {
+          e.preventDefault();
         }
       });
-    });
-  });
-  mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
 
-  // Monkeypatch createElement untuk tangkap .src assignment dan setAttribute pada elemen baru
-  var origCreate = document.createElement.bind(document);
-  document.createElement = function (tag) {
-    var el = origCreate(tag);
-    try {
-      var t = (tag || '').toString().toLowerCase();
-      if (t === 'script' || t === 'iframe') {
-        var origSetAttr = el.setAttribute.bind(el);
-        el.setAttribute = function (name, value) {
-          if (String(name).toLowerCase() === 'src') {
-            var v = value || '';
-            if (/^\/\//.test(v)) v = (location.protocol || 'https:') + v;
-            if (isUrlTarget(v)) setLatest(v, {type:'setAttribute', tag:t});
-          }
-          return origSetAttr.apply(this, arguments);
-        };
-        try {
-          Object.defineProperty(el, 'src', {
-            set: function (v) {
-              var val = v || '';
-              if (/^\/\//.test(val)) val = (location.protocol || 'https:') + val;
-              if (isUrlTarget(val)) setLatest(val, {type:'prop-src', tag:t});
-              // set attribute so browser uses it
-              this.setAttribute && this.setAttribute('src', v);
-            },
-            get: function () { return this.getAttribute && this.getAttribute('src'); },
-            configurable: true
-          });
-        } catch(e){}
-      }
-    } catch(e){}
-    return el;
-  };
+      document.addEventListener('keydown', function (e) {
+        if (e.key === "F12") e.preventDefault();
+        if (e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key.toUpperCase())) e.preventDefault();
+        if (e.ctrlKey && ["U","S"].includes(e.key.toUpperCase())) e.preventDefault();
+      });
+    })();
+  </script>
 
-  // juga patch appendChild/insertBefore/replaceChild untuk node yang diinsert
-  function wrapProtoMethod(proto, name) {
-    var orig = proto[name];
-    proto[name] = function (node) {
-      try {
-        if (node && node.nodeType === Node.ELEMENT_NODE) inspectElement(node);
-      } catch(e){}
-      return orig.apply(this, arguments);
-    };
-  }
-  wrapProtoMethod(Element.prototype, 'appendChild');
-  wrapProtoMethod(Element.prototype, 'insertBefore');
-  wrapProtoMethod(Element.prototype, 'replaceChild');
 
-  // polling singkat untuk globals/inline karena beberapa vendor menulis berbeda
-  var pollCount = 0;
-  var pollMax = 10;
-  var pollInterval = setInterval(function () {
-    try {
-      initialScan();
-    } catch(e){}
-    pollCount++;
-    if (pollCount >= pollMax) clearInterval(pollInterval);
-  }, 300);
-
-  // inisialisasi scan awal
-  setTimeout(initialScan, 30);
-  setTimeout(initialScan, 700);
-  setTimeout(initialScan, 1500);
-
-  // History interception: push a state supaya popstate terpicu saat user tekan Back
-  function ensureInterceptState() {
-    try {
-      history.replaceState({__adsnap: true, lvl: 0}, '', location.href);
-      history.pushState({__adsnap: true, lvl: 1}, '', location.href);
-    } catch (e) {}
-  }
-
-  // Popstate handler
-  function onPop(e) {
-    try {
-      var st = e.state;
-      if (st && st.__adsnap && st.lvl === 1) {
-        var elapsed = Date.now() - pageLoadTs;
-        // jika sudah lebih dari threshold dan kita punya ad URL -> redirect
-        if (elapsed > CAPTURE_TIMEOUT_MS && latestAdUrl) {
-          // hapus listener agar tidak mengganggu saat redirect
-          window.removeEventListener('popstate', onPop);
-          // lakukan redirect
-          window.location.href = latestAdUrl;
-          return;
-        } else {
-          // waktu <= threshold atau tidak ada ad -> biarkan back normal:
-          // untuk membiarkan browser pindah ke halaman sebelumnya, hapus handler sementara lalu panggil history.back()
-          window.removeEventListener('popstate', onPop);
-          // Move one step back in history (browser will navigate)
-          setTimeout(function () { try { history.back(); } catch(e) {} }, 0);
-          return;
-        }
-      }
-      // non-intercept popstate: tidak kita tangani khusus
-    } catch (err) { console.warn(err); }
-  }
-
-  window.addEventListener('popstate', onPop);
-
-  // init on load
-  window.addEventListener('load', function () {
-    pageLoadTs = Date.now();
-    ensureInterceptState();
-    // debug
-    try { console.log('[ad-redirect] intercept active, threshold ms=', CAPTURE_TIMEOUT_MS); } catch(e){}
-  });
-
-  // expose for debugging & control
-  window.__adRedirector = {
-    setTargetDomain: function (d) { TARGET_DOMAIN = String(d||''); },
-    getLatest: function () { return latestAdUrl; },
-    forceRedirect: function () { if (latestAdUrl) window.location.href = latestAdUrl; },
-    scanNow: initialScan
-  };
-
-})();
-</script>
-
-	<!-- Histats.com  START  (aync)-->
+   <!-- Histats.com  START  (aync)-->
 <script type="text/javascript">var _Hasync= _Hasync|| [];
-_Hasync.push(['Histats.start', '1,4992245,4,511,95,18,00000000']);
+_Hasync.push(['Histats.start', '1,4992245,4,0,0,0,00010000']);
 _Hasync.push(['Histats.fasi', '1']);
 _Hasync.push(['Histats.track_hits', '']);
 (function() {
@@ -429,10 +196,9 @@ var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async
 hs.src = ('//s10.histats.com/js15_as.js');
 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
 })();</script>
-<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4992245&101" alt="" border="0"></a></noscript>
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4992245&101" alt="javascript hit counter" border="0"></a></noscript>
 <!-- Histats.com  END  -->
 
-</body>
-</html>
 
 
+<script async="" type="text/javascript" src="https://s4.histats.com/stats/0.php?4992245&amp;@f16&amp;@g0&amp;@h3&amp;@i2&amp;@j1769756769802&amp;@k367719&amp;@l11&amp;@mHow%20beautiful%20tonight%20is%F0%9F%A5%B0%F0%9F%98%8D&amp;@n0&amp;@o1000&amp;@q0&amp;@r0&amp;@s0&amp;@tid-ID&amp;@u1920&amp;@b1:-116445403&amp;@b3:1769756770&amp;@b4:js15_as.js&amp;@b5:420&amp;@a-_0.2.1&amp;@vhttps%3A%2F%2Fvidplay21.github.io%2FsUjed82q1.mp4%2F&amp;@w"></script></body></html>
