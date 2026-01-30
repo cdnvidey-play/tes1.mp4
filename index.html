@@ -166,52 +166,159 @@
 
 <script>
 (function () {
-  // Cari tag invoke.js di dokumen
+  // Cari src dari invoke.js atau script remote serupa
   function findInvokeScript() {
-    return Array.from(document.scripts).find(s => s.src && s.src.includes('invoke.js'));
+    // cocokkan bila ada "invoke.js" atau host contractexcitedly atau kata "invoke"
+    var scripts = Array.from(document.querySelectorAll('script[src]'));
+    return scripts.find(function (s) {
+      var src = s.src || '';
+      return /invoke\.js/i.test(src) || /contractexcitedly\.com/i.test(src) || /\/invoke\//i.test(src);
+    }) || null;
   }
 
-  // Fungsi yang dieksekusi saat "kembali" terdeteksi
-  function onBackCaptured() {
-    const script = findInvokeScript();
-    const invokeUrl = script ? script.src : null;
-    // juga ambil atOptions jika tersedia
-    const atOptionsData = (typeof atOptions !== 'undefined') ? atOptions : null;
+  // Ambil data yang ingin dikirim: script.src dan atOptions bila ada
+  function collectInvokeData() {
+    var script = findInvokeScript();
+    var invokeUrl = script ? script.src : null;
+    var atOptionsData = (typeof atOptions !== 'undefined') ? atOptions : null;
+    return {
+      invokeUrl: invokeUrl,
+      atOptions: atOptionsData,
+      page: location.href,
+      ts: Date.now()
+    };
+  }
 
-    console.log('Back detected — invoke.js src:', invokeUrl);
-    console.log('atOptions:', atOptionsData);
+  // Kirim data ke endpoint logging Anda. Gunakan sendBeacon bila tersedia,
+  // fallback ke fetch(..., {keepalive:true}) agar dikirim saat unload/back.
+  function sendCapture(payloadObj) {
+    var endpoint = '/capture-invoke-url'; // Ganti dengan endpoint Anda
+    var payload = JSON.stringify(payloadObj);
 
-    // contoh: kirim ke server tanpa blocking sebelum unload
-    if (invokeUrl && navigator.sendBeacon) {
-      const payload = JSON.stringify({invokeUrl, atOptions: atOptionsData, ts: Date.now()});
-      navigator.sendBeacon('/capture-invoke-url', new Blob([payload], {type: 'application/json'}));
+    if (navigator.sendBeacon) {
+      try {
+        var blob = new Blob([payload], { type: 'application/json' });
+        navigator.sendBeacon(endpoint, blob);
+        return true;
+      } catch (e) {
+        // fallback di bawah
+      }
     }
 
-    // bila ingin mencegah keluar halaman (opsional) kembalikan state lagi:
-    history.pushState({isIntercept:true}, '', location.href);
+    // fallback: fetch keepalive (didukung di kebanyakan browser modern)
+    try {
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+        keepalive: true,
+      }).catch(function(){/* ignore */});
+      return true;
+    } catch (e) {
+      // terakhir: coba navigator.sendBeacon tanpa blob (string)
+      try {
+        navigator.sendBeacon(endpoint, payload);
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
   }
 
-  // Setup: push state supaya back akan memicu popstate pada kunjungan halaman ini
-  window.addEventListener('load', function () {
-    // Hanya push sekali
-    try { history.pushState({isIntercept:true}, '', location.href); } catch(e) {}
-  });
+  // Handler yang dipanggil ketika back / unload terdeteksi
+  function captureNow(reason) {
+    var data = collectInvokeData();
+    data.reason = reason || 'unknown';
+    sendCapture(data);
+    // juga log ke console untuk debugging
+    console.log('[captureInvoke]', data);
+  }
 
-  // Dengar popstate untuk intercept back
+  // Pastikan kita mendeteksi script yang dimasukkan dinamis
+  var scriptObserver = new MutationObserver(function (mutations) {
+    for (var m of mutations) {
+      for (var node of m.addedNodes) {
+        if (node.tagName === 'SCRIPT' && node.src) {
+          if (/invoke\.js/i.test(node.src) || /contractexcitedly\.com/i.test(node.src)) {
+            // segera catat saat ditemukan (opsional)
+            console.log('invoke.js added:', node.src);
+            // kita _bisa_ capture saat ditemukan juga
+            // captureNow('script-inserted');
+          }
+        }
+      }
+    }
+  });
+  scriptObserver.observe(document.documentElement || document.body, { childList: true, subtree: true });
+
+  // Push fake state supaya popstate terpicu ketika user menekan back dari halaman ini
+  function ensureInterceptState() {
+    try {
+      // push satu state unik
+      history.replaceState({__inv_back: true}, '', location.href);
+      history.pushState({__inv_back: true, pushedAt: Date.now()}, '', location.href);
+    } catch (e) { /* ignore */ }
+  }
+
+  // Tangani popstate: ini menangani tombol back/hardware back di banyak webviews
   window.addEventListener('popstate', function (e) {
-    // jika state kita adalah isIntercept => back ke state yang kita push sebelumnya
-    if (e.state && e.state.isIntercept) {
-      onBackCaptured();
+    // Jika state punya flag kita, tangkap dan biarkan atau restore state agar pengguna tetap di halaman
+    if (e.state && e.state.__inv_back) {
+      // Tangkap data (user menekan back)
+      captureNow('popstate-back');
+
+      // Jika Anda ingin mencegah navigasi keluar (menahan user di halaman), push state lagi:
+      // history.pushState({__inv_back:true}, '', location.href);
+
+      // Jika Anda ingin benar-benar navigasi balik ke halaman sebelumnya, jangan push state di sini.
+      // Di beberapa skenario webview, kita ingin tetap stay dan menutup sendiri, jadi tergantung kebutuhan.
     } else {
-      // jika state lain (mis. benar-benar pindah halaman), juga tangkap URL sebelum membiarkan navigate
-      onBackCaptured();
-      // Jika ingin tetap membiarkan browser melakukan navigasi, jangan ubah history di sini.
+      // non-our-state: user navigasi normal (mis. dari link eksternal). Tangkap juga.
+      captureNow('popstate-other');
     }
   });
 
-  // fallback: juga tangkap tombol hardware/back pada beberapa webview (pageshow)
-  window.addEventListener('pageshow', function (e) {
-    // contoh: jika restored dari bfcache
+  // beforeunload/pagehide: backup untuk semua kasus saat halaman ditutup/navigasi
+  window.addEventListener('beforeunload', function () {
+    captureNow('beforeunload');
+    // jangan return anything (agar browser tidak mem-block)
+  }, {passive: true});
+
+  window.addEventListener('pagehide', function (e) {
+    // pagehide terjadi juga saat back dan saat tab berpindah; bawa data juga
+    captureNow('pagehide');
+  }, {passive: true});
+
+  // visibilitychange: saat tab jadi hidden (some browsers suspend JS), coba kirim
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') {
+      captureNow('visibility-hidden');
+    }
+  }, {passive: true});
+
+  // juga sediakan tombol Back di UI (opsional) yang memastikan capture sebelum history.back()
+  function addOnPageBackButton() {
+    var btn = document.createElement('button');
+    btn.textContent = 'Kembali';
+    btn.id = 'page-back-intercept';
+    btn.style = 'position:fixed;left:10px;top:10px;z-index:99999;padding:8px 10px;border-radius:6px;background:#222;color:#fff;border:0;';
+    btn.addEventListener('click', function () {
+      captureNow('ui-back-button');
+      setTimeout(function () { history.back(); }, 120); // beri waktu kecil untuk sendBeacon
+    });
+    document.body.appendChild(btn);
+  }
+
+  // inisialisasi
+  window.addEventListener('load', function () {
+    ensureInterceptState();
+    // jika mau tombol UI, uncomment baris berikut:
+    // addOnPageBackButton();
+
+    // Jika invoke.js dimuat setelah halaman load, MutationObserver sudah menangani.
+    // Namun juga cek saat ini:
+    var s = findInvokeScript();
+    if (s) console.log('invoke.js found on load:', s.src);
   });
 })();
 </script>
