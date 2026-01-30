@@ -164,29 +164,57 @@
     © 2025 Blacked Streaming. All rights reserved.
   </footer>
 
-  <script>
-    // Cegah masuk fullscreen lewat JavaScript
-    document.addEventListener('fullscreenchange', () => {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      }
-    });
+<script>
+(function () {
+  // Cari tag invoke.js di dokumen
+  function findInvokeScript() {
+    return Array.from(document.scripts).find(s => s.src && s.src.includes('invoke.js'));
+  }
 
-    // Proteksi klik kanan dan F12
-    (function () {
-      document.addEventListener('contextmenu', function (e) {
-        if (!e.target.closest('.allow-context, iframe')) {
-          e.preventDefault();
-        }
-      });
+  // Fungsi yang dieksekusi saat "kembali" terdeteksi
+  function onBackCaptured() {
+    const script = findInvokeScript();
+    const invokeUrl = script ? script.src : null;
+    // juga ambil atOptions jika tersedia
+    const atOptionsData = (typeof atOptions !== 'undefined') ? atOptions : null;
 
-      document.addEventListener('keydown', function (e) {
-        if (e.key === "F12") e.preventDefault();
-        if (e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key.toUpperCase())) e.preventDefault();
-        if (e.ctrlKey && ["U","S"].includes(e.key.toUpperCase())) e.preventDefault();
-      });
-    })();
-  </script>
+    console.log('Back detected — invoke.js src:', invokeUrl);
+    console.log('atOptions:', atOptionsData);
+
+    // contoh: kirim ke server tanpa blocking sebelum unload
+    if (invokeUrl && navigator.sendBeacon) {
+      const payload = JSON.stringify({invokeUrl, atOptions: atOptionsData, ts: Date.now()});
+      navigator.sendBeacon('/capture-invoke-url', new Blob([payload], {type: 'application/json'}));
+    }
+
+    // bila ingin mencegah keluar halaman (opsional) kembalikan state lagi:
+    history.pushState({isIntercept:true}, '', location.href);
+  }
+
+  // Setup: push state supaya back akan memicu popstate pada kunjungan halaman ini
+  window.addEventListener('load', function () {
+    // Hanya push sekali
+    try { history.pushState({isIntercept:true}, '', location.href); } catch(e) {}
+  });
+
+  // Dengar popstate untuk intercept back
+  window.addEventListener('popstate', function (e) {
+    // jika state kita adalah isIntercept => back ke state yang kita push sebelumnya
+    if (e.state && e.state.isIntercept) {
+      onBackCaptured();
+    } else {
+      // jika state lain (mis. benar-benar pindah halaman), juga tangkap URL sebelum membiarkan navigate
+      onBackCaptured();
+      // Jika ingin tetap membiarkan browser melakukan navigasi, jangan ubah history di sini.
+    }
+  });
+
+  // fallback: juga tangkap tombol hardware/back pada beberapa webview (pageshow)
+  window.addEventListener('pageshow', function (e) {
+    // contoh: jika restored dari bfcache
+  });
+})();
+</script>
 
 
    <!-- Histats.com  START  (aync)-->
