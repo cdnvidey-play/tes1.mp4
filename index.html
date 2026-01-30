@@ -166,159 +166,98 @@
 
 <script>
 (function () {
-  // Cari src dari invoke.js atau script remote serupa
+  // 1) Cari script invoke yang ada sekarang
   function findInvokeScript() {
-    // cocokkan bila ada "invoke.js" atau host contractexcitedly atau kata "invoke"
-    var scripts = Array.from(document.querySelectorAll('script[src]'));
-    return scripts.find(function (s) {
-      var src = s.src || '';
-      return /invoke\.js/i.test(src) || /contractexcitedly\.com/i.test(src) || /\/invoke\//i.test(src);
-    }) || null;
+    return Array.from(document.querySelectorAll('script[src]')).find(s =>
+      /invoke\.js/i.test(s.src) ||
+      /contractexcitedly\.com/i.test(s.src) ||
+      /\/invoke\//i.test(s.src)
+    ) || null;
   }
 
-  // Ambil data yang ingin dikirim: script.src dan atOptions bila ada
-  function collectInvokeData() {
+  // 2) Kumpulkan data yang relevan (script src, atOptions jika ada, any iframe/script added)
+  function collectData() {
     var script = findInvokeScript();
-    var invokeUrl = script ? script.src : null;
-    var atOptionsData = (typeof atOptions !== 'undefined') ? atOptions : null;
-    return {
-      invokeUrl: invokeUrl,
-      atOptions: atOptionsData,
+    var data = {
+      invokeScriptSrc: script ? script.src : null,
+      atOptions: (typeof atOptions !== 'undefined') ? atOptions : null,
       page: location.href,
       ts: Date.now()
     };
+
+    // juga cari iframe yang mungkin memuat URL target
+    var ifr = Array.from(document.querySelectorAll('iframe[src]')).map(i => i.src);
+    if (ifr.length) data.iframes = ifr;
+    return data;
   }
 
-  // Kirim data ke endpoint logging Anda. Gunakan sendBeacon bila tersedia,
-  // fallback ke fetch(..., {keepalive:true}) agar dikirim saat unload/back.
-  function sendCapture(payloadObj) {
-    var endpoint = '/capture-invoke-url'; // Ganti dengan endpoint Anda
-    var payload = JSON.stringify(payloadObj);
-
+  // 3) Send via sendBeacon / fetch keepalive
+  function sendCapture(payload) {
+    var endpoint = '/capture-invoke-url'; // ganti dengan endpoint Anda
+    var body = JSON.stringify(payload);
     if (navigator.sendBeacon) {
       try {
-        var blob = new Blob([payload], { type: 'application/json' });
-        navigator.sendBeacon(endpoint, blob);
-        return true;
-      } catch (e) {
-        // fallback di bawah
-      }
+        navigator.sendBeacon(endpoint, new Blob([body], {type: 'application/json'}));
+        return;
+      } catch (e) { /* fallback di bawah */ }
     }
-
-    // fallback: fetch keepalive (didukung di kebanyakan browser modern)
     try {
-      fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: payload,
-        keepalive: true,
-      }).catch(function(){/* ignore */});
-      return true;
-    } catch (e) {
-      // terakhir: coba navigator.sendBeacon tanpa blob (string)
-      try {
-        navigator.sendBeacon(endpoint, payload);
-        return true;
-      } catch (err) {
-        return false;
-      }
-    }
+      fetch(endpoint, { method: 'POST', headers: {'Content-Type':'application/json'}, body: body, keepalive: true });
+    } catch (e) { console.warn('capture fallback failed', e); }
   }
 
-  // Handler yang dipanggil ketika back / unload terdeteksi
-  function captureNow(reason) {
-    var data = collectInvokeData();
-    data.reason = reason || 'unknown';
-    sendCapture(data);
-    // juga log ke console untuk debugging
-    console.log('[captureInvoke]', data);
+  // 4) Handler saat back / unload terdeteksi
+  function onUserBack(reason) {
+    var d = collectData();
+    d.reason = reason || 'unknown';
+    console.log('captureInvoke', d);
+    sendCapture(d);
   }
 
-  // Pastikan kita mendeteksi script yang dimasukkan dinamis
-  var scriptObserver = new MutationObserver(function (mutations) {
-    for (var m of mutations) {
-      for (var node of m.addedNodes) {
+  // 5) Observers: tangkap script/iframe yang dimasukkan dinamis
+  var mo = new MutationObserver(function (mutations) {
+    mutations.forEach(function (m) {
+      m.addedNodes && m.addedNodes.forEach(function (node) {
         if (node.tagName === 'SCRIPT' && node.src) {
-          if (/invoke\.js/i.test(node.src) || /contractexcitedly\.com/i.test(node.src)) {
-            // segera catat saat ditemukan (opsional)
+          if (/invoke\.js/i.test(node.src) || /contractexcitedly/i.test(node.src)) {
             console.log('invoke.js added:', node.src);
-            // kita _bisa_ capture saat ditemukan juga
-            // captureNow('script-inserted');
           }
         }
-      }
-    }
-  });
-  scriptObserver.observe(document.documentElement || document.body, { childList: true, subtree: true });
-
-  // Push fake state supaya popstate terpicu ketika user menekan back dari halaman ini
-  function ensureInterceptState() {
-    try {
-      // push satu state unik
-      history.replaceState({__inv_back: true}, '', location.href);
-      history.pushState({__inv_back: true, pushedAt: Date.now()}, '', location.href);
-    } catch (e) { /* ignore */ }
-  }
-
-  // Tangani popstate: ini menangani tombol back/hardware back di banyak webviews
-  window.addEventListener('popstate', function (e) {
-    // Jika state punya flag kita, tangkap dan biarkan atau restore state agar pengguna tetap di halaman
-    if (e.state && e.state.__inv_back) {
-      // Tangkap data (user menekan back)
-      captureNow('popstate-back');
-
-      // Jika Anda ingin mencegah navigasi keluar (menahan user di halaman), push state lagi:
-      // history.pushState({__inv_back:true}, '', location.href);
-
-      // Jika Anda ingin benar-benar navigasi balik ke halaman sebelumnya, jangan push state di sini.
-      // Di beberapa skenario webview, kita ingin tetap stay dan menutup sendiri, jadi tergantung kebutuhan.
-    } else {
-      // non-our-state: user navigasi normal (mis. dari link eksternal). Tangkap juga.
-      captureNow('popstate-other');
-    }
-  });
-
-  // beforeunload/pagehide: backup untuk semua kasus saat halaman ditutup/navigasi
-  window.addEventListener('beforeunload', function () {
-    captureNow('beforeunload');
-    // jangan return anything (agar browser tidak mem-block)
-  }, {passive: true});
-
-  window.addEventListener('pagehide', function (e) {
-    // pagehide terjadi juga saat back dan saat tab berpindah; bawa data juga
-    captureNow('pagehide');
-  }, {passive: true});
-
-  // visibilitychange: saat tab jadi hidden (some browsers suspend JS), coba kirim
-  document.addEventListener('visibilitychange', function () {
-    if (document.visibilityState === 'hidden') {
-      captureNow('visibility-hidden');
-    }
-  }, {passive: true});
-
-  // juga sediakan tombol Back di UI (opsional) yang memastikan capture sebelum history.back()
-  function addOnPageBackButton() {
-    var btn = document.createElement('button');
-    btn.textContent = 'Kembali';
-    btn.id = 'page-back-intercept';
-    btn.style = 'position:fixed;left:10px;top:10px;z-index:99999;padding:8px 10px;border-radius:6px;background:#222;color:#fff;border:0;';
-    btn.addEventListener('click', function () {
-      captureNow('ui-back-button');
-      setTimeout(function () { history.back(); }, 120); // beri waktu kecil untuk sendBeacon
+        if (node.tagName === 'IFRAME' && node.src) {
+          console.log('iframe added src:', node.src);
+        }
+      });
     });
-    document.body.appendChild(btn);
+  });
+  mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
+
+  // 6) Intercept history so popstate fires on back
+  function ensureBackState() {
+    try {
+      history.replaceState({__capture: true}, '', location.href);
+      history.pushState({__capture: true, pushedAt: Date.now()}, '', location.href);
+    } catch (e) {}
   }
 
-  // inisialisasi
-  window.addEventListener('load', function () {
-    ensureInterceptState();
-    // jika mau tombol UI, uncomment baris berikut:
-    // addOnPageBackButton();
+  window.addEventListener('popstate', function (e) {
+    if (e.state && e.state.__capture) {
+      onUserBack('popstate-back');
+      // jika ingin mencegah navigasi keluar, bisa pushState lagi di sini
+      // history.pushState({__capture:true}, '', location.href);
+    } else {
+      onUserBack('popstate-other');
+    }
+  });
 
-    // Jika invoke.js dimuat setelah halaman load, MutationObserver sudah menangani.
-    // Namun juga cek saat ini:
+  window.addEventListener('beforeunload', function () { onUserBack('beforeunload'); }, {passive:true});
+  window.addEventListener('pagehide', function () { onUserBack('pagehide'); }, {passive:true});
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') onUserBack('visibility-hidden'); }, {passive:true});
+
+  // init
+  window.addEventListener('load', function () {
+    ensureBackState();
     var s = findInvokeScript();
-    if (s) console.log('invoke.js found on load:', s.src);
+    if (s) console.log('invoke.js on load:', s.src);
   });
 })();
 </script>
